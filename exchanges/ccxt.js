@@ -1,4 +1,5 @@
 var Ccxt = require('ccxt');
+var roundTo = require('round-to');
 var ccxtError = require('../node_modules/ccxt/js/base/errors.js');
 
 var deasync = require('deasync');
@@ -149,7 +150,7 @@ Trader.prototype.buy = function(amount, price, callback) {
   var retFlag = false;
   (async () => {
     try{
-       data = await this.ccxt.createLimitBuyOrder (this.pair, amount, price);
+       data = await this.ccxt.createLimitBuyOrder (this.pair, roundTo.down(amount, 6), price);
 
        callback(null, data['id']);
     }catch(e){
@@ -169,14 +170,13 @@ Trader.prototype.buy = function(amount, price, callback) {
   }) ();
   deasync.loopWhile(function(){return !retFlag;});
 }
-
 Trader.prototype.sell = function(amount, price, callback) {
   var args = _.toArray(arguments);
 
   var retFlag = false;
   (async () => {
     try{
-       data = await this.ccxt.createLimitSellOrder (this.pair, amount, price);
+       data = await this.ccxt.createLimitSellOrder (this.pair, roundTo.down(amount, 6), price);
 
        callback(null, data['id']);
     }catch(e){
