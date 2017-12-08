@@ -197,6 +197,9 @@ Trader.prototype.checkOrder = function(order, callback) {
        console.log(data);
        console.log(data['status'] === 'closed' ? true : false);
        callback(null, data['status'] === 'closed' ? true : false);
+    }catch(NotSupported e){
+      log.error('The function used is not supported at present. Error: ', e);
+      return callback(e, undefined);
     }catch(e){
        log.error('unable to cancel order', order, '(', e, '), retrying');
        retFlag = true;
