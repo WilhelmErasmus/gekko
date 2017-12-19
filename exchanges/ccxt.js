@@ -1,3 +1,4 @@
+const roundTo = require('round-to');
 var Ccxt = require('ccxt');
 var ccxtError = require('../node_modules/ccxt/js/base/errors.js');
 
@@ -150,6 +151,7 @@ Trader.prototype.buy = function(amount, price, callback) {
   (async () => {
     try{
        //Round amount
+       amount = roundTo.down(amount, 6)
        try{
          var roundAmount = this.ccxt.amountToLots(this.pair, amount);
        }catch(e){
@@ -196,6 +198,7 @@ Trader.prototype.sell = function(amount, price, callback) {
   (async () => {
     try{
        //Round amount
+       amount = roundTo.down(amount, 6)
        try{
          var roundAmount = this.ccxt.amountToLots(this.pair, amount);
        }catch(e){
