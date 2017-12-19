@@ -218,9 +218,17 @@ Trader.prototype.sell = function(amount, price, callback) {
 
        callback(null, data['id']);
     }catch(e){
-       log.error(e);
-       retFlag = true;
-       return this.retry(this.sell, args);
+      if(e instanceof ccxtError.InsufficientFunds) {
+         // retry with the already reduced amount, will be reduced again in the recursive call
+         log.error('Error sell ' , 'INSUFFICIENT_FUNDS', e);
+         // correct the amount to avoid an INSUFFICIENT_FUNDS exception
+         var correctedAmount = amount - (0.004*amount);
+         log.debug('sell', 'corrected amount', {amount: correctedAmount, price: price});
+         return this.retry(this.sell, [correctedAmount, price, callback]);
+      }
+      log.error(e);
+      retFlag = true;
+      return this.retry(this.sell, args);
     }
     retFlag = true;
   }) ();
