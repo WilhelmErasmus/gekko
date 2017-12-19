@@ -1,4 +1,4 @@
-const roundTo = require('round-to');
+var roundTo = require('round-to');
 var Ccxt = require('ccxt');
 var ccxtError = require('../node_modules/ccxt/js/base/errors.js');
 
